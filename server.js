@@ -4,6 +4,7 @@ import colors from 'colors';
 import morgan from 'morgan';
 import connectdb from './db.js';
 import authroutes from './routes/authroutes.js';
+import cors from 'cors';
 //configure env
 dotenv.config();
 //databse config
@@ -11,6 +12,7 @@ connectdb();
 //rest  object
 const app=express();
 //middlewares
+app.use(cors());
 app.use(express.json())
 app.use(morgan('dev'))
 
@@ -21,7 +23,7 @@ app.get('/',(req,res)=>{
     res.send("<h1>Welcome to Ecommerce app</h1>")
 })
 //port
-const PORT=process.env.PORT||8080;
+const PORT=process.env.PORT;
 //run 
 app.listen(PORT,()=>{
     console.log(`Server Running on ${PORT}`.bgBlue.white);
