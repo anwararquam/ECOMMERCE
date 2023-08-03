@@ -1,6 +1,5 @@
 import React from 'react'
-import Layout from '../components/Layouts/Layout'
-
+import Layout from '../components/Layouts/layout'
 const homepage = () => {
   return (
     <Layout title={'Best Offers'}>
