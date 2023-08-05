@@ -9,12 +9,14 @@ import Register from './pages/Auth/Register';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
   import 'react-toastify/dist/ReactToastify.css';
+import Login from './pages/Auth/Login';
 function App() {
   return (
     <>
     <Routes>
       <Route path="/" element={<Homepage/>}/>
       <Route path="/register" element={<Register/>}/>
+      <Route path="/login" element={<Login/>}/>
       <Route path="/about" element={<About/>}/>
       <Route path="/contact" element={<Contact/>}/>
       <Route path="/policy" element={<Policy/>}/>
