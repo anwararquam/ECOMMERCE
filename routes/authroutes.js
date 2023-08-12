@@ -18,4 +18,11 @@ router.get('/user-auth',requiresignIn,(req,res)=>{
         ok:true
     })
 })
+
+//protected route for admin
+router.get('/admin-auth',requiresignIn,isAdmin,(req,res)=>{
+    res.status(200).send({
+        ok:true
+    })
+})
 export default router
