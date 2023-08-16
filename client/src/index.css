@@ -83,7 +83,7 @@ page not found css
     min-height: 70vh;
     flex-direction: column;
     background-color: #ffdee9;
-    background-image: linear-gradient(0deg, #ffdee9 0%, #b5fffc 100%);
+    background-image: linear-gradient(to right, #490666 0%, #b5fffc 100%);
   }
   
   .register form{
@@ -145,7 +145,7 @@ page not found css
     min-height: 70vh;
     flex-direction: column;
     background-color: #ffdee9;
-    background-image: linear-gradient(0deg, #ffdee9 0%, #b5fffc 100%);
+    background-image: linear-gradient(to right, #490666 0%, #b5fffc 100%);
   }
   
   .login form{
