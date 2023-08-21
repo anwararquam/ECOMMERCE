@@ -6,6 +6,7 @@ import connectdb from './db.js';
 import authroutes from './routes/authroutes.js';
 import categoryRoutes from './routes/categoryRoutes.js'
 import cors from 'cors';
+import productroutes from './routes/ProductRoute.js'
 //configure env
 dotenv.config();
 //databse config
@@ -20,6 +21,7 @@ app.use(morgan('dev'))
 //routes
 app.use('/api/v1/auth',authroutes);
 app.use('/api/v1/category',categoryRoutes);
+app.use('/api/v1/product',productroutes)
 //rest api
 app.get('/',(req,res)=>{
     res.send("<h1>Welcome to Ecommerce app</h1>")

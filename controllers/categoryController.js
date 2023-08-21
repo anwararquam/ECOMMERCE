@@ -68,3 +68,39 @@ export const categorycontroller=async(req,res)=>{
         })
     }
 }
+export const singleCategoryController=async(req,res)=>{
+    try {
+        
+        const category=await categorymodel.findOne({slug:req.params.slug})
+        res.status(200).send({
+            success:true,
+            message:"Get Single Category Successfully",
+            category
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success:false,
+            error,
+            message:"Error while getting single category"
+        })
+    }
+}
+//delete category
+export const deleteCategory=async(req,res)=>{
+    try {
+        const {id}=req.params
+        await categorymodel.findByIdAndDelete(id)
+        res.status(200).send({
+            success:true,
+            message:"Category Successfully removed"
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success:false,
+            "message":"Error while removing category",
+            error
+        })
+    }
+}
