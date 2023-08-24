@@ -4,7 +4,7 @@ import fs from 'fs';
 
 export const createproductcontroller=async(req,res)=>{
 try {
-    const {name,description,slug,price,category,quantity} =req.fields
+    const {name,description,price,category,quantity} =req.fields
     const {photo}=req.files
     switch(true){
         case !name:res.status(500).send({error:'Name is Required'})
@@ -16,8 +16,8 @@ try {
     }
     const product=new Productmodel({...req.fields,slug:slugify(name)})
     if(photo){
-        product.photo.data=fs.readFileSync(photo.path)
-        product.photo.contentType=photo.type
+        product.photo.data=fs.readFileSync(photo.path);
+        product.photo.contentType=photo.type;
     }
      await product.save()
      res.status(201).send({
@@ -34,4 +34,72 @@ try {
 
     })
 }
+}
+//update product present in the product model
+export const updateproduct=async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        console.log(error),
+        res.status(500).send({
+            success:false,
+            error,
+            message:"Unable to Update product",
+            
+        })
+    }
+}
+//productcontroller for getting a single product at a time
+export const getsingleproductcontroller=async(req,res)=>{
+        try {
+            const product=await Productmodel.findOne({slug:req.params.slug}).select('-photo').populate('category');
+            res.status(200).send({
+                success:true,
+                message:"Successfully fetched the product",
+                product,
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({
+                success:false,
+                error,
+                messsage:"Unable to get single product"
+            })
+        }
+
+}
+//acesss product 
+export const getproductcontroller=async(req,res)=>{
+    try {
+        const products= await Productmodel.find({}).populate('categrory').select('-photo').limit(12).sort({createdAt:-1});
+        res.status(200).send({
+            success:true,
+            message:"All products",
+            total:products.length,
+            products,
+            
+        })
+    } catch (error) {
+        console.log(error),
+        res.status(500).send({
+            success:false,
+            message:"Error in getting products",
+            error:error.message,
+            
+        })
+        
+    }
+}
+//delete product
+export const deleteproduct=async(req,res)=>{
+        try {
+            
+        } catch (error) {
+            console.log(error),
+            res.status(500).send({
+                success:false,
+                error,
+                message:"Unable to dlete the product",
+            })
+        }
 }
