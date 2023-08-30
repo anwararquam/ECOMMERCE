@@ -76,7 +76,7 @@ export const getsingleproductcontroller=async(req,res)=>{
 //acesss product 
 export const getproductcontroller=async(req,res)=>{
     try {
-        const products= await Productmodel.find({}).populate('categrory').select('-photo').limit(12).sort({createdAt:-1});
+        const products= await Productmodel.find({}).populate('category').select('-photo').limit(12).sort({createdAt:-1});
         res.status(200).send({
             success:true,
             message:"All products",

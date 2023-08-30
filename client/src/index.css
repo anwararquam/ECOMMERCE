@@ -201,3 +201,7 @@ page not found css
   .forgot{
     margin-bottom: 20px;
   }
+  .product-link{
+    text-decoration: none;
+    color: black;
+  }

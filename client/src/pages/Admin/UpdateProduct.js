@@ -4,11 +4,12 @@ import Adminmenu from '../../components/Layouts/Adminmenu'
 import axios from 'axios'
 import {toast} from 'react-toastify';
 import {Select} from 'antd';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate,useParams } from 'react-router-dom';
 const {Option}=Select
 const ip= "http://localhost:8080";
-const CreateProduct = () => {
-  const [categories,setCategories]=useState([]);
+const UpdateProduct = () => {
+    const [categories,setCategories]=useState([]);
+    const params=useParams();
   const [category,setCategory]=useState([]);
   const [name,setName]=useState("");
   const [description,setDescription]=useState("");
@@ -18,6 +19,27 @@ const CreateProduct = () => {
   const [photo,setPhoto]=useState("")
   const ip= "http://localhost:8080";
   const navigate=useNavigate();
+
+
+  //get single product
+  const getSingleProduct=async()=>{
+    try {
+        const {data} = await axios.get(`${ip}/api/v1/product/get-product/${params.slug}`)
+        setName(data.product.name);
+        setCategories(data.product.categories);
+        setDescription(data.product.description);
+        setPrice(data.product.price);
+        setQuantity(data.product.quantity);
+        setCategory(data.product.category);
+    } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong");
+    }
+  }
+  useEffect(()=>{
+    getSingleProduct();
+    //eslint-disable-next-line
+  },[])
   //CREATE PRODUCT
   const handleCreate=async(e)=>{
       e.preventDefault();
@@ -57,13 +79,14 @@ const CreateProduct = () => {
     getallCategory();
   },[])
   return (
-    <Layout title={"Dashboard-Create Product"}>
+    <div>
+      <Layout title={"Dashboard-Create Product"}>
     <div className="row">
         <div className="col-md-3">
             <Adminmenu/>
         </div>
         <div className="col-md-9">
-        <h1>Create Products</h1>
+        <h1>Update Products</h1>
         <div className="m-1">
           <Select bordered={false} placeholder="Select a category" size='large' showSearch className='form-select mb-3'onChange={(value)=>{setCategory(value)}}>
           {categories?.map(c=>(
@@ -132,14 +155,15 @@ const CreateProduct = () => {
                 </Select>
               </div>
               <div className="mb-3">
-                <button className='btn btn-primary' onClick={handleCreate}>CREATE PRODUCT</button>
+                <button className='btn btn-primary' onClick={handleCreate}>UPDATE PRODUCT</button>
               </div>
         </div>
         </div>
     </div>
       
     </Layout>
+    </div>
   )
 }
 
-export default CreateProduct
+export default UpdateProduct
