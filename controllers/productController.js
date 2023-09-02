@@ -58,6 +58,7 @@ export const productphotocontroller=async(req,res)=>{
 export const getsingleproductcontroller=async(req,res)=>{
         try {
             const product=await Productmodel.findOne({slug:req.params.slug}).select('-photo').populate('category');
+            
             res.status(200).send({
                 success:true,
                 message:"Successfully fetched the product",
@@ -114,15 +115,15 @@ export const deleteproductcontroller=async(req,res)=>{
 }
 export const updateproductcontroller=async(req,res)=>{
     try {
-        const {name,description,price,category,quantity} =req.fields
-        const {photo}=req.files
+        const {name,description,price,category,quantity} =req.fields;
+        const {photo}=req.files;
         switch(true){
-            case !name:res.status(500).send({error:'Name is Required'})
-            case !description:res.status(500).send({error:'Description is Required'})
-            case !price:res.status(500).send({error:'Price is Required'})
-            case !category:res.status(500).send({error:'Category is Required'})
-            case !quantity:res.status(500).send({error:'Quantity is Required'})
-            case !photo && photo.size>1000:res.status(500).send({error:'Photo is Required && Size should be less than 1mb'})
+            case !name:return res.status(500).send({error:'Name is Required'})
+            case !description:return res.status(500).send({error:'Description is Required'})
+            case !price:return res.status(500).send({error:'Price is Required'})
+            case !category:return res.status(500).send({error:'Category is Required'})
+            case !quantity:return res.status(500).send({error:'Quantity is Required'})
+            case photo && !photo.size>10000:return res.status(500).send({error:'Photo is Required && Size should be less than 1mb'})
         }
         const product= await Productmodel.findByIdAndUpdate(req.params.pid,{...req.fields,slug:slugify(name)},{new:true})
         if(photo){
@@ -133,7 +134,7 @@ export const updateproductcontroller=async(req,res)=>{
          res.status(201).send({
             success:true,
             message:"Product Updated Successfully",
-            product
+            product,
          })
     } catch (error) {
         console.log(error),
