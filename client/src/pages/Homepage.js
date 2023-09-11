@@ -1,14 +1,18 @@
 import React,{useState,useEffect} from 'react'
 import Layout from '../components/Layouts/layout';
 import axios from 'axios';
-import {Checkbox,Radio} from 'antd';
+import {Button, Checkbox,Radio} from 'antd';
 import {Prices} from '../components/Prices.js'
 const Homepage = () => {
   const[products,setProducts]=useState([])
   const[categories,setCategories]=useState([])
   const[checked,setChecked]=useState([])
   const[radio,setRadio]=useState([])
+  const [total,setTotal]=useState(0);
+  const[page,setPage]=useState(1);
+  const [loading,setLoading]=useState(false);
   const ip= "http://localhost:8080";
+  //get total count
   const getallCategory = async()=>{
     try {
       const {data}=await axios.get(`${ip}/api/v1/category/get-category`)
@@ -21,33 +25,51 @@ const Homepage = () => {
   }
   useEffect(()=>{
     getallCategory();
+    getTotal();
   },[])
   //all products
 const getAllProducts=async()=>{
     try {
-      const {data}=await axios.get(`${ip}/api/v1/product/get-product`);
+      setLoading(true)
+      const {data}=await axios.get(`${ip}/api/v1/product/product/list/${page}`);
+      setLoading(false)
       setProducts(data.products);
     } catch (error) {
       console.log(error);
     }
-     
   };
-  const handleFilter=(value,id)=>{
+  const getTotal=async()=>{
     try {
-      let all=[...checked]
+      const {data}=await axios.get(`${ip}/api/v1/product/product-count`)
+      setTotal(data?.total)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleFilter=(value,id)=>{
+    let all=[...checked];
       if(value){
-        all.push(id)
+        all.push(id);
       }else{
-        all=all.filter(c=>c!==id);
+        all=all.filter((c)=>c!==id);
       }
       setChecked(all);
-    } catch (error) {
+  }
+  useEffect(()=>{
+    if(!checked.length || !radio.length)getAllProducts();
+    },[checked.length,radio.length])
+  useEffect(()=>{
+    if(checked.length || radio.length)filterProduct();
+    },[checked,radio]);
+  //get filtered products
+  const filterProduct=async()=>{
+    try{
+      const {data}=await axios.post(`${ip}/api/v1/product/product-filters`,{checked,radio})
+      setProducts(data?.products)
+    }catch (error) {
       console.log(error);
     }
   }
-  useEffect(()=>{
-    getAllProducts();
-  },[])
   return (
     <Layout title={'All Product - Best Offers'}>
       <div className="row mt-3">
@@ -70,10 +92,12 @@ const getAllProducts=async()=>{
             ))}
            </Radio.Group>
           </div>
+          <div className="d-flex flex-column">
+            <button className='btn btn-danger' onClick={()=>window.location.reload()}>RESET FILTER</button>
+          </div>
         </div>
         <div className="col-md-9">
-        {JSON.stringify(checked,null,4)}
-        {JSON.stringify(radio,null,4)}
+       
           <h1 className='text-center'>All Products</h1>
           <div className="d-flex flex-wrap">
           {products?.map((p)=>(
@@ -81,19 +105,26 @@ const getAllProducts=async()=>{
               <img src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} />
                 <div className="card-body">
                  <h5 className="card-title">{p.name}</h5>
-                 <p className="card-text">{p.description}</p>
+                 <p className="card-text">{p.description.substring(0,25)}...</p>
+                 <p className="card-text">${p.price}</p>
                  <button class="btn btn-outline-dark ms-1 ">Add +</button>
-                 
-                <button class="btn btn-outline-secondary ms-1">Info</button>
+                 <button class="btn btn-outline-secondary ms-1">Info</button>
                 </div>
               </div>
-              
               ))}
+          </div>
+          <div className='m-2 p-3'>
+          {products && products.length<total && (<button className='btn btn-warning' onClick={(e)=>{
+            e.preventDefault();
+          setPage(page+1);
+          }}>
+            {loading ? "Loading..." : "Loadmore"}
+          </button>)}
+            {total}
           </div>
         </div>
       </div>
     </Layout>
   )
 }
-
 export default Homepage

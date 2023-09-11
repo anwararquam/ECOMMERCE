@@ -145,3 +145,60 @@ export const updateproductcontroller=async(req,res)=>{
         })
     }
 }
+//filter product
+export const productfiltercontroller=async(req,res)=>{
+    try {
+        const {checked,radio}=req.body;
+        let args={};
+        if(checked.length>0)args.category=checked;
+        if(radio.length)args.price={$gte:radio[0],$lte:radio[1]};
+        const products=await Productmodel.find(args);
+        res.status(200).send({
+            success:true,
+            products,
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success:false,
+            message:"Unable to filter the product",
+            error,
+        })
+    }
+}
+//total product count
+export const productcountcontroller=async(req,res)=>{
+try {
+    const total=await Productmodel.findById({}).estimatedDocumentCount()
+    res.status(200).send({
+        success:true,
+        total       
+    })
+} catch (error) {
+    console.log(error);
+    res.status(400).send({
+        success:false,
+        message:"Unable to count total of product",
+        error,
+    })
+}
+}
+
+export const productListController=async(req,res)=>{
+    try {
+        const perpage=9;
+        const page=req.params.page ? req.params.page: 1;
+        const products=await Productmodel.find({}).select('-photo').skip((page-1)*perpage).limit(perpage).sort({createdAt:-1})
+        res.status(200).send({
+            success:true,
+            products
+        })
+    } catch (error) {
+        console.log(error),
+        res.status(400).send({
+            success:false,
+            message:"Unable to get the list of pages",
+            error
+        })
+    }
+}
