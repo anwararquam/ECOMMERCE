@@ -31,19 +31,36 @@ const Homepage = () => {
 const getAllProducts=async()=>{
     try {
       setLoading(true)
-      const {data}=await axios.get(`${ip}/api/v1/product/product/list/${page}`);
+      const {data}=await axios.get(`${ip}/api/v1/product/product-list/${page}`);
       setLoading(false)
       setProducts(data.products);
     } catch (error) {
       console.log(error);
     }
   };
+  
   const getTotal=async()=>{
     try {
       const {data}=await axios.get(`${ip}/api/v1/product/product-count`)
       setTotal(data?.total)
     } catch (error) {
       console.log(error)
+    }
+  }
+  useEffect(()=>{
+    if(page === 1)return;
+    loadmore();
+  },[page])
+  //loading 
+  const loadmore=async()=>{
+    try {
+      setLoading(true);
+      const {data}=await axios.get(`${ip}/api/v1/product/product-list/${page}`)
+      setLoading(false);
+      setProducts([...products,...data?.products]);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
   }
   const handleFilter=(value,id)=>{

@@ -186,7 +186,7 @@ try {
 
 export const productListController=async(req,res)=>{
     try {
-        const perpage=9;
+        const perpage=8;
         const page=req.params.page ? req.params.page: 1;
         const products=await Productmodel.find({}).select('-photo').skip((page-1)*perpage).limit(perpage).sort({createdAt:-1})
         res.status(200).send({
@@ -199,6 +199,25 @@ export const productListController=async(req,res)=>{
             success:false,
             message:"Unable to get the list of pages",
             error
+        })
+    }
+}
+export const productSearchfilterController=async(req,res)=>{
+    try {
+        const {keyword}=req.params;
+        const result =await Productmodel.find({
+            $or:[
+                {name:{$regex:keyword,$options:"i"}},
+                {description:{$regex:keyword,$options:"i"}},
+            ]
+        }).select("-photo")
+        res.json(result);
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success:false,
+            message:"Error in searching product",
+            error,
         })
     }
 }
