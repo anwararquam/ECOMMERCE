@@ -2,9 +2,14 @@ import React,{useState,useEffect} from 'react'
 import Layout from '../components/Layouts/layout';
 import axios from 'axios';
 import {Button, Checkbox,Radio} from 'antd';
+import { useCart } from '../context/cart';
 import {Prices} from '../components/Prices.js'
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 const Homepage = () => {
+  const navigate=useNavigate();
   const[products,setProducts]=useState([])
+  const[cart,setCart]=useCart()
   const[categories,setCategories]=useState([])
   const[checked,setChecked]=useState([])
   const[radio,setRadio]=useState([])
@@ -110,10 +115,10 @@ const getAllProducts=async()=>{
            </Radio.Group>
           </div>
           <div className="d-flex flex-column">
-            <button className='btn btn-danger' onClick={()=>window.location.reload()}>RESET FILTER</button>
+            <button className='btn btn-primary' onClick={()=>window.location.reload()}>RESET FILTER</button>
           </div>
         </div>
-        <div className="col-md-9">
+        <div className="col-md-9 ">
        
           <h1 className='text-center'>All Products</h1>
           <div className="d-flex flex-wrap">
@@ -124,8 +129,11 @@ const getAllProducts=async()=>{
                  <h5 className="card-title">{p.name}</h5>
                  <p className="card-text">{p.description.substring(0,25)}...</p>
                  <p className="card-text">${p.price}</p>
-                 <button class="btn btn-outline-dark ms-1 ">Add +</button>
-                 <button class="btn btn-outline-secondary ms-1">Info</button>
+                 <button class="btn btn-outline-dark ms-1 " onClick={()=>navigate(`/product/${p.slug}`)}>Info</button>
+                 <button class="btn btn-outline-secondary ms-1" onClick={()=>{
+                  setCart([...cart,p]);
+                  toast.success("Item added to cart");
+                 }}>Add +</button>
                 </div>
               </div>
               ))}

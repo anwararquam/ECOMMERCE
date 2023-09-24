@@ -1,5 +1,6 @@
 import slugify from "slugify";
 import Productmodel from "../models/Productmodel.js"
+import Categorymodel from "../models/Categorymodel.js"
 import fs from 'fs';
 
 export const createproductcontroller=async(req,res)=>{
@@ -43,9 +44,8 @@ export const productphotocontroller=async(req,res)=>{
             res.set('Content-type',product.photo.contentType)
             return res.status(200).send(product.photo.data);
         }
-        
     } catch (error) {
-        console.log(error),
+        console.log(error);
         res.status(500).send({
             success:false,
             message:"Error while getting photos",
@@ -218,6 +218,46 @@ export const productSearchfilterController=async(req,res)=>{
             success:false,
             message:"Error in searching product",
             error,
+        })
+    }
+}
+export const relatedproductController=async(req,res)=>{
+    try {
+        const {cid,pid}=req.params
+        const products=await Productmodel.find({
+            category:cid,
+            _id:{$ne:pid}
+        }).select('-photo').limit(3).populate("category");
+        res.status(200).send({
+            success:true,
+            
+            products
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success:false,
+            message:'Error in getting related Product',
+            error,
+
+        })
+    }
+}
+export const productCategoryController=async(req,res)=>{
+    try {
+        const category=await Categorymodel.findOne({slug:req.params.slug})
+        const products=await Productmodel.find({category}).populate('category')
+        res.status(200).send({
+            success:true,
+            category,
+            products
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success:false,
+            message:"Error while getting products",
+            error
         })
     }
 }
