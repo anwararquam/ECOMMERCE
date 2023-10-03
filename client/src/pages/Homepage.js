@@ -132,6 +132,7 @@ const getAllProducts=async()=>{
                  <button class="btn btn-outline-dark ms-1 " onClick={()=>navigate(`/product/${p.slug}`)}>Info</button>
                  <button class="btn btn-outline-secondary ms-1" onClick={()=>{
                   setCart([...cart,p]);
+                  localStorage.setItem("cart",JSON.stringify([...cart,p]))
                   toast.success("Item added to cart");
                  }}>Add +</button>
                 </div>
@@ -145,7 +146,7 @@ const getAllProducts=async()=>{
           }}>
             {loading ? "Loading..." : "Loadmore"}
           </button>)}
-            {total}
+            
           </div>
         </div>
       </div>

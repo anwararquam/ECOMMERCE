@@ -5,6 +5,8 @@ import  toast  from 'react-hot-toast'
 import Searchinput from '../Form/Searchinput.js'
 import useCategory from '../../hooks/useCategory'
 import { useCart } from '../../context/cart'
+import {Badge} from 'antd';
+import {BsFillBagCheckFill} from 'react-icons/bs'
 const Header = () => {
   const [auth,setAuth]=useAuth()
   const categories=useCategory()
@@ -28,7 +30,7 @@ const Header = () => {
       <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
       <Searchinput/>
         <li className="nav-item">
-          <NavLink to={"/categories"} className="nav-link" aria-current="page" href="#">Home</NavLink>
+          <NavLink to={"/"} className="nav-link" aria-current="page" href="#">Home</NavLink>
         </li>
        <li className="nav-item dropdown">
   <Link className="nav-link dropdown-toggle" to={"/"}  data-bs-toggle="dropdown" >
@@ -74,7 +76,10 @@ const Header = () => {
           </>)
         }
         <li className="nav-item">
-          <NavLink to="/cart" className="nav-link" href="#">Cart {cart?.length}</NavLink>
+        <Badge count={cart?.length} showZero>
+        <NavLink to="/cart" className="nav-link" href="#" ><BsFillBagCheckFill size={25}/> </NavLink>
+    </Badge>
+          
         </li>
         {/* <li className="nav-item dropdown">
           <NavLink to="/" className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

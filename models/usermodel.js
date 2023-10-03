@@ -21,7 +21,7 @@ phone:{
     
 },
 address:{
-    type:String,
+    type:{},
     required:true,
     
 },

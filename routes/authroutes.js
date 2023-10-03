@@ -1,5 +1,5 @@
 import express from 'express';
-import {registercontroller,logincontroller,testcontroller, forgotPasswordController} from '../controllers/authcontroller.js'; 
+import {registercontroller,logincontroller,testcontroller, forgotPasswordController, updateProfileController} from '../controllers/authcontroller.js'; 
 import { isAdmin, requiresignIn } from '../middlewares/authmiddleware.js';
 //router object
 const router=express.Router();
@@ -25,4 +25,5 @@ router.get('/admin-auth',requiresignIn,isAdmin,(req,res)=>{
         ok:true
     })
 })
+router.put('/profile',requiresignIn,updateProfileController)
 export default router
