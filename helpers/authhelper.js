@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 export const hashpassword=async(password)=>{
     try {
-        const saltrounds=10;
+        const saltrounds=12;
        const hashedpassword=await bcrypt.hash(password,saltrounds)
        return hashedpassword
     } catch (error) {

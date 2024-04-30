@@ -5,10 +5,8 @@ import Usermenu from '../../components/Layouts/Usermenu'
 import { useAuth } from '../../context/auth'
 import toast from 'react-hot-toast'
 const ip= "http://localhost:8080";
-
-
 const Profile = () => {
-  
+    
   //context
   const [auth,setAuth]=useAuth();
   //state
@@ -46,14 +44,15 @@ const Profile = () => {
   }
   return (
     <Layout title={"Your Profile"}>
-      <div className="container-fluid m-3 p-3">
+    <div className="profile">
+    <div className="container-fluid m-3 p-3">
         <div className="row">
             <div className="col-md-3">
                 <Usermenu/>
             </div>
             <div className="col-md-9">
             <h1>USER PROFILE</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='userprofile'>
   <div className="mb-3">
     <input type="text" value={name} 
     onChange={(e)=>setName(e.target.value)}
@@ -96,6 +95,8 @@ const Profile = () => {
             </div>
         </div>
       </div>
+      </div>
+      
     </Layout>
   )
 }

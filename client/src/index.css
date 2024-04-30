@@ -205,3 +205,28 @@ page not found css
     text-decoration: none;
     color: black;
   }
+  .userprofile{
+    
+    margin-left: 10px;
+  }
+  .profile{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    flex-direction: column;
+    background-color: #ffdee9;
+    background-image: linear-gradient(to right, #1a91e0 0%, #b5fffc 100%);
+  }
+  .avtar{
+        background-image: none;
+        background: #1a91e0;
+        text-shadow: #000;
+  }
+  .user_dashboard{
+    display: flex;
+    min-height: 70vh;
+    flex-direction: column;
+    background-color: #ffdee9;
+    background-image: linear-gradient(to right, #1a91e0 0%, #b5fffc 100%);
+  }
